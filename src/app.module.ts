@@ -8,7 +8,7 @@ import { FoodsModule } from './foods/foods.module';
   providers: [],
   imports: [
     ConfigModule.forRoot({
-      envFilePath: '.env',
+      envFilePath: `.${process.env.NODE_ENV}.env`,
     }),
     SequelizeModule.forRoot({
       dialect: 'postgres',
