@@ -1,3 +1,4 @@
+import { ApiProperty } from '@nestjs/swagger';
 import { Column, DataType, Model, Table } from 'sequelize-typescript';
 
 interface FoodCreationAttrs {
@@ -10,6 +11,7 @@ interface FoodCreationAttrs {
 
 @Table({ tableName: 'foods' })
 export class Food extends Model<Food, FoodCreationAttrs> {
+  @ApiProperty({ example: '1', description: 'Unique identifier' })
   @Column({
     type: DataType.INTEGER,
     unique: true,
@@ -18,30 +20,38 @@ export class Food extends Model<Food, FoodCreationAttrs> {
   })
   id: number;
 
+  @ApiProperty({ example: 'Food', description: 'Name of the food' })
   @Column({
     type: DataType.STRING,
     allowNull: false,
   })
   name: string;
 
+  @ApiProperty({ example: '1', description: 'Week' })
   @Column({
     type: DataType.STRING,
     allowNull: false,
   })
   week: string;
 
+  @ApiProperty({ example: '4', description: 'Price' })
   @Column({
     type: DataType.STRING,
     allowNull: false,
   })
   price: string;
 
+  @ApiProperty({
+    example: 'Sandwich',
+    description: 'Description of the food',
+  })
   @Column({
     type: DataType.STRING,
     allowNull: false,
   })
   description: string;
 
+  @ApiProperty({ example: '01.jpg', description: 'Image of the food' })
   @Column({
     type: DataType.STRING,
     allowNull: true,
