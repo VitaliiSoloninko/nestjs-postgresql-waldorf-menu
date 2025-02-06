@@ -3,6 +3,8 @@ import { ConfigModule } from '@nestjs/config';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { Food } from './foods/foods.model';
 import { FoodsModule } from './foods/foods.module';
+import { UsersModule } from './users/users.module';
+import { UsersModule } from './users/users.module';
 
 @Module({
   controllers: [],
@@ -22,6 +24,7 @@ import { FoodsModule } from './foods/foods.module';
       autoLoadModels: true,
     }),
     FoodsModule,
+    UsersModule,
   ],
 })
 export class AppModule {}

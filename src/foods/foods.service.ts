@@ -31,7 +31,6 @@ export class FoodsService {
       throw new NotFoundException();
     }
     Object.assign(food, dto);
-
     return await food.save();
   }
 
@@ -40,7 +39,6 @@ export class FoodsService {
     if (!food) {
       throw new NotFoundException();
     }
-
     return await food.destroy();
   }
 }
