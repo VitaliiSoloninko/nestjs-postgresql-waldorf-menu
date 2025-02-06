@@ -1,6 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { CreateFoodDto } from './dto/create-food.dto';
+import { UpdateFoodDto } from './dto/update-food.dto';
 import { Food } from './foods.model';
 
 @Injectable()
@@ -25,12 +26,12 @@ export class FoodsService {
     return food;
   }
 
-  async updateFood(id: number, dto: CreateFoodDto) {
+  async updateFood(id: number, updateFoodDto: UpdateFoodDto) {
     const food = await this.foodRepository.findOne({ where: { id } });
     if (!food) {
       throw new NotFoundException();
     }
-    Object.assign(food, dto);
+    Object.assign(food, updateFoodDto);
     return await food.save();
   }
 
