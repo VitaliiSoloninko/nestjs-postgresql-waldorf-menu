@@ -7,36 +7,48 @@ import {
   Patch,
   Post,
 } from '@nestjs/common';
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UsersService } from './users.service';
 
-@Controller('users')
+@ApiTags('Users')
+@Controller('api/users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
+  @ApiOperation({ summary: 'Create user' })
+  @ApiResponse({ status: 200, type: CreateUserDto })
   @Post()
-  create(@Body() createUserDto: CreateUserDto) {
-    return this.usersService.create(createUserDto);
+  createUser(@Body() createUserDto: CreateUserDto) {
+    return this.usersService.createUser(createUserDto);
   }
 
+  @ApiOperation({ summary: 'Get all users' })
+  @ApiResponse({ status: 200, type: [CreateUserDto] })
   @Get()
-  findAll() {
-    return this.usersService.findAll();
+  findAllUsers() {
+    return this.usersService.findAllUsers();
   }
 
+  @ApiOperation({ summary: 'Get one user' })
+  @ApiResponse({ status: 200, type: CreateUserDto })
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.usersService.findOne(+id);
+  findOneUser(@Param('id') id: string) {
+    return this.usersService.findOneUser(+id);
   }
 
+  @ApiOperation({ summary: 'Update user' })
+  @ApiResponse({ status: 200, type: CreateUserDto })
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.usersService.update(+id, updateUserDto);
+  updateUser(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
+    return this.usersService.updateUser(+id, updateUserDto);
   }
 
+  @ApiOperation({ summary: 'Delete user' })
+  @ApiResponse({ status: 200 })
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.usersService.remove(+id);
+  removeUser(@Param('id') id: string) {
+    return this.usersService.removeUser(+id);
   }
 }

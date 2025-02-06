@@ -4,7 +4,6 @@ import { SequelizeModule } from '@nestjs/sequelize';
 import { Food } from './foods/foods.model';
 import { FoodsModule } from './foods/foods.module';
 import { UsersModule } from './users/users.module';
-import { UsersModule } from './users/users.module';
 
 @Module({
   controllers: [],
