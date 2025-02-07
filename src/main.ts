@@ -18,6 +18,6 @@ async function start() {
 
   app.enableCors();
 
-  await app.listen(PORT, () => console.log(`Server started on port = ${PORT}`));
+  await app.listen(PORT, '0.0.0.0');
 }
 start();
