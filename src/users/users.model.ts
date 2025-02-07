@@ -17,7 +17,7 @@ interface UserCreationAttrs {
   letter: string;
 }
 
-@Table({ tableName: 'api/users' })
+@Table({ tableName: 'users' })
 export class User extends Model<User, UserCreationAttrs> {
   @ApiProperty({ example: 1, description: 'Unique identifier' })
   @Column({
