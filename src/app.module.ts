@@ -3,11 +3,11 @@ import { ConfigModule } from '@nestjs/config';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { Food } from './foods/foods.model';
 import { FoodsModule } from './foods/foods.module';
-import { UsersModule } from './users/users.module';
-import { RolesModule } from './roles/roles.module';
-import { User } from './users/users.model';
 import { Role } from './roles/roles.model';
+import { RolesModule } from './roles/roles.module';
 import { UserRoles } from './roles/user-roles.model';
+import { User } from './users/users.model';
+import { UsersModule } from './users/users.module';
 
 @Module({
   controllers: [],
