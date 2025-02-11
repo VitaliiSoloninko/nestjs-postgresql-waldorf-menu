@@ -8,6 +8,8 @@ import { RolesModule } from './roles/roles.module';
 import { UserRoles } from './roles/user-roles.model';
 import { User } from './users/users.model';
 import { UsersModule } from './users/users.module';
+import { AuthModule } from './auth/auth.module';
+import { ProfileModule } from './profile/profile.module';
 
 @Module({
   controllers: [],
@@ -29,6 +31,8 @@ import { UsersModule } from './users/users.module';
     FoodsModule,
     UsersModule,
     RolesModule,
+    AuthModule,
+    ProfileModule,
   ],
 })
 export class AppModule {}
