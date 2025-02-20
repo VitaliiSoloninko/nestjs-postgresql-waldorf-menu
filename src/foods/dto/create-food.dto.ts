@@ -4,6 +4,9 @@ export class CreateFoodDto {
   @ApiProperty({ example: 'Food', description: 'Name of the food' })
   readonly name: string;
 
+  @ApiProperty({ example: '1', description: 'Day' })
+  readonly day: string;
+
   @ApiProperty({ example: '1', description: 'Week' })
   readonly week: string;
 

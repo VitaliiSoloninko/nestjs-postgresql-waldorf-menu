@@ -3,6 +3,7 @@ import { Column, DataType, Model, Table } from 'sequelize-typescript';
 
 interface FoodCreationAttrs {
   name: string;
+  day: string;
   week: string;
   price: string;
   description: string;
@@ -26,6 +27,13 @@ export class Food extends Model<Food, FoodCreationAttrs> {
     allowNull: false,
   })
   name: string;
+
+  @ApiProperty({ example: '1', description: 'Day' })
+  @Column({
+    type: DataType.STRING,
+    allowNull: false,
+  })
+  day: string;
 
   @ApiProperty({ example: '1', description: 'Week' })
   @Column({
