@@ -65,4 +65,11 @@ export class Food extends Model<Food, FoodCreationAttrs> {
     allowNull: true,
   })
   image: string;
+
+  @ApiProperty({ example: 'isChecked', description: 'false' })
+  @Column({
+    type: DataType.BOOLEAN,
+    allowNull: true,
+  })
+  isChecked: boolean;
 }

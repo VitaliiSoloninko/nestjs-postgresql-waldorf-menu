@@ -21,4 +21,7 @@ export class UpdateFoodDto {
 
   @ApiProperty({ example: '01.jpg', description: 'Image of the food' })
   readonly image: string;
+
+  @ApiProperty({ example: 'isChecked', description: 'false' })
+  readonly isChecked: boolean;
 }
