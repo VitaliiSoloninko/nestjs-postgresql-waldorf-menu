@@ -8,17 +8,41 @@ import { UpdateOrderDto } from './dto/update-order.dto';
 export class OrdersService {
   constructor(@InjectModel(Order) private orderRepository: typeof Order) {}
 
+  async createOrUpdateOrders(dtos: CreateOrderDto[]): Promise<Order[]> {
+    const orders = await Promise.all(
+      dtos.map(async (dto) => {
+        const existingOrder = await this.orderRepository.findOne({
+          where: {
+            userId: dto.userId,
+            date: dto.date,
+          },
+        });
+
+        if (existingOrder) {
+          if (dto.ordered === false) {
+            await existingOrder.destroy();
+            return null;
+          } else {
+            Object.assign(existingOrder, dto);
+            return await existingOrder.save();
+          }
+        } else {
+          if (dto.ordered === false) {
+            return null;
+          } else {
+            return await this.orderRepository.create(dto);
+          }
+        }
+      }),
+    );
+
+    return orders.filter((order) => order !== null);
+  }
+
   async create(dto: CreateOrderDto) {
     const order = await this.orderRepository.create(dto);
     return order;
   }
-
-  // async create(dtos: CreateOrderDto[]): Promise<Order[]> {
-  //   const orders = await Promise.all(
-  //     dtos.map((dto) => this.orderRepository.create(dto)),
-  //   );
-  //   return orders;
-  // }
 
   async findAll(): Promise<Order[]> {
     const orders = await this.orderRepository.findAll();

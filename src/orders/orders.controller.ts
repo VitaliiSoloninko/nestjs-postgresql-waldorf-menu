@@ -17,6 +17,13 @@ import { OrdersService } from './orders.service';
 export class OrdersController {
   constructor(private orderService: OrdersService) {}
 
+  @ApiOperation({ summary: 'Create or update orders' })
+  @ApiResponse({ status: 200, type: [Order] })
+  @Post()
+  createOrUpdateOrders(@Body() createOrderDtos: CreateOrderDto[]) {
+    return this.orderService.createOrUpdateOrders(createOrderDtos);
+  }
+
   @ApiOperation({ summary: 'Create order' })
   @ApiResponse({ status: 200, type: CreateOrderDto })
   @Post()
