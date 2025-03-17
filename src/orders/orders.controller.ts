@@ -1,12 +1,4 @@
-import {
-  Body,
-  Controller,
-  Delete,
-  Get,
-  Param,
-  Patch,
-  Post,
-} from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { Order } from './orders.model';
@@ -24,13 +16,6 @@ export class OrdersController {
     return this.orderService.createOrUpdateOrders(createOrderDtos);
   }
 
-  @ApiOperation({ summary: 'Create order' })
-  @ApiResponse({ status: 200, type: CreateOrderDto })
-  @Post()
-  createOrder(@Body() createOrderDto: CreateOrderDto) {
-    return this.orderService.create(createOrderDto);
-  }
-
   @ApiOperation({ summary: 'Get all orders' })
   @ApiResponse({ status: 200, type: [Order] })
   @Get()
@@ -38,18 +23,33 @@ export class OrdersController {
     return this.orderService.findAll();
   }
 
-  @ApiOperation({ summary: 'Get one order' })
-  @ApiResponse({ status: 200, type: Order })
-  @Get(':id')
-  findOneOrder(@Param('id') id: number) {
-    return this.orderService.findOne(id);
+  @ApiOperation({ summary: 'Find orders by user ID' })
+  @ApiResponse({ status: 200, type: [Order] })
+  @Get('user/:userId')
+  findOrdersByUserId(@Param('userId') userId: number): Promise<Order[]> {
+    return this.orderService.findOrdersByUserId(userId);
   }
 
-  @ApiOperation({ summary: 'Update order' })
-  @ApiResponse({ status: 200, type: CreateOrderDto })
-  @Patch(':id')
-  updateOrder(@Param('id') id: number, @Body() createOrderDto: CreateOrderDto) {
-    return this.orderService.update(id, createOrderDto);
+  @ApiOperation({
+    summary: 'Find orders by user ID for current month and year',
+  })
+  @ApiResponse({ status: 200, type: [Order] })
+  @Get('user/:userId/current')
+  findOrdersByUserIdAndCurrentMonthAndYear(
+    @Param('userId') userId: number,
+  ): Promise<Order[]> {
+    return this.orderService.findOrdersByUserIdAndCurrentMonthAndYear(userId);
+  }
+
+  @ApiOperation({
+    summary: 'Find orders by user ID for previous month and year',
+  })
+  @ApiResponse({ status: 200, type: [Order] })
+  @Get('user/:userId/previous')
+  findOrdersByUserIdAndPreviousMonthAndYear(
+    @Param('userId') userId: number,
+  ): Promise<Order[]> {
+    return this.orderService.findOrdersByUserIdAndPreviousMonthAndYear(userId);
   }
 
   @ApiOperation({ summary: 'Delete order' })

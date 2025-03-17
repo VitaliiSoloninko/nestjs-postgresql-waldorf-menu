@@ -2,7 +2,6 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { Order } from 'src/orders/orders.model';
 import { CreateOrderDto } from './dto/create-order.dto';
-import { UpdateOrderDto } from './dto/update-order.dto';
 
 @Injectable()
 export class OrdersService {
@@ -39,45 +38,50 @@ export class OrdersService {
     return orders.filter((order) => order !== null);
   }
 
-  async create(dto: CreateOrderDto) {
-    const order = await this.orderRepository.create(dto);
-    return order;
-  }
-
   async findAll(): Promise<Order[]> {
     const orders = await this.orderRepository.findAll();
     return orders;
   }
 
-  findAllByUserId(userId: number): Promise<Order[]> {
+  findOrdersByUserId(userId: number): Promise<Order[]> {
     return this.orderRepository.findAll({ where: { userId } });
   }
 
-  findAllByUserIdAndActiveMonthAndYear(userId: number): Promise<Order[]> {
+  async findOrdersByUserIdAndCurrentMonthAndYear(
+    userId: number,
+  ): Promise<Order[]> {
+    const currentDate = new Date();
+    const currentMonth = currentDate.getMonth() + 1;
+    const currentYear = currentDate.getFullYear();
+
     return this.orderRepository.findAll({
       where: {
         userId,
-        month: new Date().getMonth() + 1,
-        year: new Date().getFullYear(),
+        year: currentYear,
+        month: currentMonth,
       },
     });
   }
 
-  async findOne(id: number) {
-    const order = await this.orderRepository.findOne({ where: { id } });
-    if (!order) {
-      throw new NotFoundException();
-    }
-    return order;
-  }
+  async findOrdersByUserIdAndPreviousMonthAndYear(
+    userId: number,
+  ): Promise<Order[]> {
+    const currentDate = new Date();
+    let previousMonth = currentDate.getMonth();
+    let previousYear = currentDate.getFullYear();
 
-  async update(id: number, updateOrderDto: UpdateOrderDto) {
-    const order = await this.orderRepository.findOne({ where: { id } });
-    if (!order) {
-      throw new NotFoundException();
+    if (previousMonth === 0) {
+      previousMonth = 12;
+      previousYear -= 1;
     }
-    Object.assign(order, updateOrderDto);
-    return await order.save();
+
+    return this.orderRepository.findAll({
+      where: {
+        userId,
+        year: previousYear,
+        month: previousMonth,
+      },
+    });
   }
 
   async remove(id: number) {
