@@ -30,17 +30,6 @@ export class OrdersController {
     return this.orderService.findOrdersByUserId(userId);
   }
 
-  @ApiOperation({
-    summary: 'Find orders by user ID for current month and year',
-  })
-  @ApiResponse({ status: 200, type: [Order] })
-  @Get('user/:userId/current')
-  findOrdersByUserIdAndCurrentMonthAndYear(
-    @Param('userId') userId: number,
-  ): Promise<Order[]> {
-    return this.orderService.findOrdersByUserIdAndCurrentMonthAndYear(userId);
-  }
-
   @ApiOperation({ summary: 'Delete order' })
   @ApiResponse({ status: 200 })
   @Delete(':id')
