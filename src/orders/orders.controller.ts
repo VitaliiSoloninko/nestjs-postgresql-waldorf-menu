@@ -23,7 +23,7 @@ export class OrdersController {
     return this.orderService.findAll();
   }
 
-  @ApiOperation({ summary: 'Find orders by user ID' })
+  @ApiOperation({ summary: 'Find all orders by user ID' })
   @ApiResponse({ status: 200, type: [Order] })
   @Get('user/:userId')
   findOrdersByUserId(@Param('userId') userId: number): Promise<Order[]> {
@@ -39,17 +39,6 @@ export class OrdersController {
     @Param('userId') userId: number,
   ): Promise<Order[]> {
     return this.orderService.findOrdersByUserIdAndCurrentMonthAndYear(userId);
-  }
-
-  @ApiOperation({
-    summary: 'Find orders by user ID for previous month and year',
-  })
-  @ApiResponse({ status: 200, type: [Order] })
-  @Get('user/:userId/previous')
-  findOrdersByUserIdAndPreviousMonthAndYear(
-    @Param('userId') userId: number,
-  ): Promise<Order[]> {
-    return this.orderService.findOrdersByUserIdAndPreviousMonthAndYear(userId);
   }
 
   @ApiOperation({ summary: 'Delete order' })

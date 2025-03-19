@@ -12,6 +12,7 @@ import { UserRoles } from './roles/user-roles.model';
 import { User } from './users/users.model';
 import { UsersModule } from './users/users.module';
 import { Order } from './orders/orders.model';
+import { UserOrdersModule } from './user-orders/user-orders.module';
 
 @Module({
   controllers: [],
@@ -36,6 +37,7 @@ import { Order } from './orders/orders.model';
     AuthModule,
     ProfileModule,
     OrdersModule,
+    UserOrdersModule,
   ],
 })
 export class AppModule {}

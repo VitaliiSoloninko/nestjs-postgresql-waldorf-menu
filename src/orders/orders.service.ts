@@ -43,7 +43,7 @@ export class OrdersService {
     return orders;
   }
 
-  findOrdersByUserId(userId: number): Promise<Order[]> {
+  async findOrdersByUserId(userId: number): Promise<Order[]> {
     return this.orderRepository.findAll({ where: { userId } });
   }
 
