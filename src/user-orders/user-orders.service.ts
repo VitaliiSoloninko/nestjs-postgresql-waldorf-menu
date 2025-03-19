@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
+import { Op } from 'sequelize';
 import { Order } from 'src/orders/orders.model';
 
 @Injectable()
@@ -38,29 +39,33 @@ export class UserOrdersService {
     });
   }
 
-  async findOrdersByUserIdAndCurrentWeekAndYear(
+  async findOrdersByUserIdAndWeekAndYear(
     userId: number,
+    weekNumber: number,
   ): Promise<Order[]> {
-    const currentDate = new Date();
-    const currentYear = currentDate.getFullYear();
-    const currentWeek = this.getWeekNumber(currentDate);
+    const currentYear = new Date().getFullYear();
+    const startOfWeek = this.getStartOfWeek(currentYear, weekNumber);
+    const endOfWeek = new Date(startOfWeek);
+    endOfWeek.setDate(startOfWeek.getDate() + 6);
 
     return this.orderRepository.findAll({
       where: {
         userId,
-        year: currentYear,
-        week: currentWeek,
+        date: {
+          [Op.between]: [startOfWeek, endOfWeek],
+        },
       },
     });
   }
 
-  getWeekNumber(date: Date): number {
-    const d = new Date(
-      Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()),
+  private getStartOfWeek(year: number, weekNumber: number): Date {
+    const firstDayOfYear = new Date(year, 0, 1);
+    const daysOffset = (weekNumber - 1) * 7;
+    const startOfWeek = new Date(
+      firstDayOfYear.setDate(firstDayOfYear.getDate() + daysOffset),
     );
-    const dayNum = d.getUTCDay() || 7;
-    d.setUTCDate(d.getUTCDate() + 4 - dayNum);
-    const yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
-    return Math.ceil(((d.getTime() - yearStart.getTime()) / 86400000 + 1) / 7);
+    const dayOfWeek = startOfWeek.getDay();
+    const diff = startOfWeek.getDate() - dayOfWeek + (dayOfWeek === 0 ? -6 : 1); // Adjust when day is Sunday
+    return new Date(startOfWeek.setDate(diff));
   }
 }

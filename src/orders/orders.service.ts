@@ -47,43 +47,6 @@ export class OrdersService {
     return this.orderRepository.findAll({ where: { userId } });
   }
 
-  async findOrdersByUserIdAndCurrentMonthAndYear(
-    userId: number,
-  ): Promise<Order[]> {
-    const currentDate = new Date();
-    const currentMonth = currentDate.getMonth() + 1;
-    const currentYear = currentDate.getFullYear();
-
-    return this.orderRepository.findAll({
-      where: {
-        userId,
-        year: currentYear,
-        month: currentMonth,
-      },
-    });
-  }
-
-  async findOrdersByUserIdAndPreviousMonthAndYear(
-    userId: number,
-  ): Promise<Order[]> {
-    const currentDate = new Date();
-    let previousMonth = currentDate.getMonth();
-    let previousYear = currentDate.getFullYear();
-
-    if (previousMonth === 0) {
-      previousMonth = 12;
-      previousYear -= 1;
-    }
-
-    return this.orderRepository.findAll({
-      where: {
-        userId,
-        year: previousYear,
-        month: previousMonth,
-      },
-    });
-  }
-
   async remove(id: number) {
     const order = await this.orderRepository.findByPk(id);
     if (!order) {
