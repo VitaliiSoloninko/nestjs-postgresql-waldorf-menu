@@ -47,6 +47,10 @@ export class OrdersService {
     return this.orderRepository.findAll({ where: { userId } });
   }
 
+  async findOrdersByDate(date: string): Promise<Order[]> {
+    return this.orderRepository.findAll({ where: { date } });
+  }
+
   async remove(id: number) {
     const order = await this.orderRepository.findByPk(id);
     if (!order) {

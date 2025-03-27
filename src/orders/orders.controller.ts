@@ -30,6 +30,13 @@ export class OrdersController {
     return this.orderService.findOrdersByUserId(userId);
   }
 
+  @ApiOperation({ summary: 'Find all orders by date' })
+  @ApiResponse({ status: 200, type: [Order] })
+  @Get('date/:date')
+  findOrdersByDate(@Param('date') date: string): Promise<Order[]> {
+    return this.orderService.findOrdersByDate(date);
+  }
+
   @ApiOperation({ summary: 'Delete order' })
   @ApiResponse({ status: 200 })
   @Delete(':id')
