@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
-import { Op } from 'sequelize';
 import { Order } from 'src/orders/orders.model';
 
 @Injectable()
@@ -39,33 +38,49 @@ export class UserOrdersService {
     });
   }
 
+  // async findOrdersByUserIdAndWeekAndYear(
+  //   userId: number,
+  //   weekNumber: number,
+  // ): Promise<Order[]> {
+  //   const currentYear = new Date().getFullYear();
+  //   const startOfWeek = this.getStartOfWeek(currentYear, weekNumber);
+  //   const endOfWeek = new Date(startOfWeek);
+  //   endOfWeek.setDate(startOfWeek.getDate() + 6);
+
+  //   return this.orderRepository.findAll({
+  //     where: {
+  //       userId,
+  //       date: {
+  //         [Op.between]: [startOfWeek, endOfWeek],
+  //       },
+  //     },
+  //   });
+  // }
+
+  // private getStartOfWeek(year: number, weekNumber: number): Date {
+  //   const firstDayOfYear = new Date(year, 0, 1);
+  //   const daysOffset = (weekNumber - 1) * 7;
+  //   const startOfWeek = new Date(
+  //     firstDayOfYear.setDate(firstDayOfYear.getDate() + daysOffset),
+  //   );
+  //   const dayOfWeek = startOfWeek.getDay();
+  //   const diff = startOfWeek.getDate() - dayOfWeek + (dayOfWeek === 0 ? -6 : 1); // Adjust when day is Sunday
+  //   return new Date(startOfWeek.setDate(diff));
+  // }
+
   async findOrdersByUserIdAndWeekAndYear(
     userId: number,
     weekNumber: number,
   ): Promise<Order[]> {
     const currentYear = new Date().getFullYear();
-    const startOfWeek = this.getStartOfWeek(currentYear, weekNumber);
-    const endOfWeek = new Date(startOfWeek);
-    endOfWeek.setDate(startOfWeek.getDate() + 6);
 
+    // Query the database directly for the weekNumber and year
     return this.orderRepository.findAll({
       where: {
         userId,
-        date: {
-          [Op.between]: [startOfWeek, endOfWeek],
-        },
+        week: weekNumber, // Assuming you have a 'week' column in your database
+        year: currentYear,
       },
     });
-  }
-
-  private getStartOfWeek(year: number, weekNumber: number): Date {
-    const firstDayOfYear = new Date(year, 0, 1);
-    const daysOffset = (weekNumber - 1) * 7;
-    const startOfWeek = new Date(
-      firstDayOfYear.setDate(firstDayOfYear.getDate() + daysOffset),
-    );
-    const dayOfWeek = startOfWeek.getDay();
-    const diff = startOfWeek.getDate() - dayOfWeek + (dayOfWeek === 0 ? -6 : 1); // Adjust when day is Sunday
-    return new Date(startOfWeek.setDate(diff));
   }
 }
