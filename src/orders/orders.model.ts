@@ -8,6 +8,7 @@ interface OrderCreationAttrs {
   date: string;
   userId: number;
   day: number;
+  dayName: string;
   week: number;
   month: number;
   year: number;
@@ -66,6 +67,13 @@ export class Order extends Model<Order, OrderCreationAttrs> {
     allowNull: false,
   })
   day: number;
+
+  @ApiProperty({ example: 'Montag', description: 'Day name' })
+  @Column({
+    type: DataType.STRING,
+    allowNull: false,
+  })
+  dayName: string;
 
   @ApiProperty({ example: '11', description: 'Week' })
   @Column({

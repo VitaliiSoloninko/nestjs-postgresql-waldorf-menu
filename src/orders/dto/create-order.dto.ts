@@ -19,6 +19,9 @@ export class CreateOrderDto {
   @ApiProperty({ example: '11', description: 'Day' })
   readonly day: number;
 
+  @ApiProperty({ example: 'Montag', description: 'Day name' })
+  readonly dayName: string;
+
   @ApiProperty({ example: '11', description: 'Week' })
   readonly week: number;
 
