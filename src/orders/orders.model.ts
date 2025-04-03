@@ -3,8 +3,8 @@ import { Column, DataType, Model, Table } from 'sequelize-typescript';
 
 interface OrderCreationAttrs {
   foodId: number;
-  name: string;
-  price: number;
+  foodName: string;
+  foodPrice: number;
   date: string;
   userId: number;
   day: number;
@@ -38,14 +38,14 @@ export class Order extends Model<Order, OrderCreationAttrs> {
     type: DataType.STRING,
     allowNull: false,
   })
-  name: string;
+  foodName: string;
 
   @ApiProperty({ example: 4, description: 'Food price' })
   @Column({
     type: DataType.INTEGER,
     allowNull: false,
   })
-  price: number;
+  foodPrice: number;
 
   @ApiProperty({ example: '11.03.2025', description: 'Date' })
   @Column({

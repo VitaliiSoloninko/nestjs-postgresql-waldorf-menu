@@ -6,10 +6,10 @@ export class UpdateOrderDto extends PartialType(CreateOrderDto) {
   readonly foodId: number;
 
   @ApiProperty({ example: 'Menu 1', description: 'Menu number' })
-  readonly name: string;
+  readonly foodName: string;
 
   @ApiProperty({ example: 4, description: 'Food price' })
-  readonly price: number;
+  readonly foodPrice: number;
 
   @ApiProperty({ example: '11.03.2025', description: 'Date' })
   readonly date: string;
