@@ -22,22 +22,6 @@ export class UserOrdersService {
     });
   }
 
-  async findOrdersByUserIdAndCurrentMonthAndYear(
-    userId: number,
-  ): Promise<Order[]> {
-    const currentDate = new Date();
-    const currentMonth = currentDate.getMonth() + 1;
-    const currentYear = currentDate.getFullYear();
-
-    return this.orderRepository.findAll({
-      where: {
-        userId,
-        year: currentYear,
-        month: currentMonth,
-      },
-    });
-  }
-
   async findOrdersByUserIdAndWeekAndYear(
     userId: number,
     weekNumber: number,
@@ -48,6 +32,22 @@ export class UserOrdersService {
       where: {
         userId,
         week: weekNumber,
+        year: currentYear,
+      },
+    });
+  }
+
+  async findOrdersByUserIdAndMonthAndYear(
+    userId: number,
+    monthNumber: number,
+  ): Promise<Order[]> {
+    const currentYear = new Date().getFullYear();
+    const currentMonth = monthNumber;
+
+    return this.orderRepository.findAll({
+      where: {
+        userId,
+        month: currentMonth,
         year: currentYear,
       },
     });
