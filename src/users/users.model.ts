@@ -117,6 +117,20 @@ export class User extends Model<User, UserCreationAttrs> {
   })
   letter: string;
 
+  @ApiProperty({ example: 'true', description: 'Is email confirmed' })
+  @Column({
+    type: DataType.BOOLEAN,
+    defaultValue: false,
+  })
+  emailConfirmed: boolean;
+
+  @ApiProperty({ example: 'true', description: 'Is address confirmed' })
+  @Column({
+    type: DataType.BOOLEAN,
+    defaultValue: false,
+  })
+  addressConfirmed: boolean;
+
   @BelongsToMany(() => Role, () => UserRoles)
   roles: Role[];
 }

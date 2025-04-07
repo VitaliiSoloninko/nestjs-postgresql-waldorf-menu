@@ -40,4 +40,10 @@ export class UpdateUserDto extends PartialType(CreateUserDto) {
 
   @ApiProperty({ example: 'A', description: 'Letter' })
   readonly letter: string;
+
+  // @ApiProperty({ example: 'true', description: 'Is address confirmed' })
+  // readonly emailConfirmed: boolean;
+
+  // @ApiProperty({ example: 'true', description: 'Is address confirmed' })
+  // readonly addressConfirmed: boolean;
 }
