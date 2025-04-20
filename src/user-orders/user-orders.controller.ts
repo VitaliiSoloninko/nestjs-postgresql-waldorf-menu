@@ -30,14 +30,16 @@ export class UserOrdersController {
     summary: 'Find orders by userID, specified month, year',
   })
   @ApiResponse({ status: 200, type: [Order] })
-  @Get('user-orders/:userId/month/:monthNumber')
+  @Get('user-orders/:userId/month/:monthNumber/year/:yearNumber')
   findOrdersByUserIdAndMonthAndYear(
     @Param('userId') userId: number,
     @Param('monthNumber') monthNumber: number,
+    @Param('yearNumber') yearNumber: number,
   ): Promise<Order[]> {
     return this.userOrdersService.findOrdersByUserIdAndMonthAndYear(
       userId,
       monthNumber,
+      yearNumber,
     );
   }
 

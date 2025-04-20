@@ -40,9 +40,11 @@ export class UserOrdersService {
   async findOrdersByUserIdAndMonthAndYear(
     userId: number,
     monthNumber: number,
+    yearNumber: number,
   ): Promise<Order[]> {
     const currentYear = new Date().getFullYear();
     const currentMonth = monthNumber;
+    const year = yearNumber;
 
     return this.orderRepository.findAll({
       where: {
