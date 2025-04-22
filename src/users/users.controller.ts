@@ -6,10 +6,12 @@ import {
   Param,
   Patch,
   Post,
+  Query,
 } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { User } from './users.model';
 import { UsersService } from './users.service';
 
 @ApiTags('Users')
@@ -50,5 +52,26 @@ export class UsersController {
   @Delete(':id')
   removeUser(@Param('id') id: string) {
     return this.usersService.removeUser(+id);
+  }
+
+  @ApiOperation({ summary: 'Filter users by fields' })
+  @ApiResponse({ status: 200, type: [User] })
+  @Get('filter')
+  filterUsers(
+    @Query('id') id?: number,
+    @Query('firstName') firstName?: string,
+    @Query('lastName') lastName?: string,
+    @Query('firstNameChild') firstNameChild?: string,
+    @Query('lastNameChild') lastNameChild?: string,
+    @Query('class') className?: string,
+  ) {
+    return this.usersService.filterUsers({
+      id,
+      firstName,
+      lastName,
+      firstNameChild,
+      lastNameChild,
+      class: className,
+    });
   }
 }

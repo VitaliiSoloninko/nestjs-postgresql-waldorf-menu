@@ -4,6 +4,7 @@ import { RolesService } from 'src/roles/roles.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './users.model';
+import { Op } from 'sequelize';
 
 @Injectable()
 export class UsersService {
@@ -56,5 +57,37 @@ export class UsersService {
       include: { all: true },
     });
     return user;
+  }
+
+  async filterUsers(filters: {
+    id?: number;
+    firstName?: string;
+    lastName?: string;
+    firstNameChild?: string;
+    lastNameChild?: string;
+    class?: string;
+  }): Promise<User[]> {
+    const where: any = {};
+
+    if (filters.id) {
+      where.id = filters.id;
+    }
+    if (filters.firstName) {
+      where.firstName = { [Op.iLike]: `%${filters.firstName}%` }; // Case-insensitive search
+    }
+    if (filters.lastName) {
+      where.lastName = { [Op.iLike]: `%${filters.lastName}%` };
+    }
+    if (filters.firstNameChild) {
+      where.firstNameChild = { [Op.iLike]: `%${filters.firstNameChild}%` };
+    }
+    if (filters.lastNameChild) {
+      where.lastNameChild = { [Op.iLike]: `%${filters.lastNameChild}%` };
+    }
+    if (filters.class) {
+      where.class = { [Op.iLike]: `%${filters.class}%` };
+    }
+
+    return this.userRepository.findAll({ where });
   }
 }
