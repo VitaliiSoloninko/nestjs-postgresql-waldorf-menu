@@ -58,20 +58,14 @@ export class UsersController {
   @ApiResponse({ status: 200, type: [User] })
   @Get('filter')
   filterUsers(
-    @Query('id') id?: number,
+    @Query('id') id?: string,
     @Query('firstName') firstName?: string,
     @Query('lastName') lastName?: string,
-    @Query('firstNameChild') firstNameChild?: string,
-    @Query('lastNameChild') lastNameChild?: string,
-    @Query('class') className?: string,
   ) {
     return this.usersService.filterUsers({
-      id,
+      id: id && !isNaN(Number(id)) ? Number(id) : undefined,
       firstName,
       lastName,
-      firstNameChild,
-      lastNameChild,
-      class: className,
     });
   }
 }

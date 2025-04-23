@@ -2,6 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { Order } from 'src/orders/orders.model';
 import { CreateOrderDto } from './dto/create-order.dto';
+import { Op } from 'sequelize';
 
 @Injectable()
 export class OrdersService {
@@ -57,5 +58,18 @@ export class OrdersService {
       throw new NotFoundException();
     }
     return await order.destroy();
+  }
+
+  async findOrdersByMonth(month: number, year: number): Promise<Order[]> {
+    return this.orderRepository.findAll({
+      where: {
+        date: {
+          [Op.between]: [
+            new Date(year, month - 1, 1), // Start of the month
+            new Date(year, month, 0), // End of the month
+          ],
+        },
+      },
+    });
   }
 }

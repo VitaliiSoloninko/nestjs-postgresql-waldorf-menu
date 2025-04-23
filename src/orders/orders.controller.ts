@@ -1,4 +1,13 @@
-import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
+import {
+  BadRequestException,
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Query,
+} from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { Order } from './orders.model';
@@ -42,5 +51,22 @@ export class OrdersController {
   @Delete(':id')
   removeOrder(@Param('id') id: number) {
     return this.orderService.remove(id);
+  }
+
+  @ApiOperation({ summary: 'Filter orders by month' })
+  @ApiResponse({ status: 200, type: [Order] })
+  @Get('filter-by-month')
+  filterOrdersByMonth(
+    @Query('month') month: string,
+    @Query('year') year: string,
+  ) {
+    const monthNumber = parseInt(month, 10);
+    const yearNumber = parseInt(year, 10);
+
+    if (isNaN(monthNumber) || isNaN(yearNumber)) {
+      throw new BadRequestException('Invalid month or year');
+    }
+
+    return this.orderService.findOrdersByMonth(monthNumber, yearNumber);
   }
 }

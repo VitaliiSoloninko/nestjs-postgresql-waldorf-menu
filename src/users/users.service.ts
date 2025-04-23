@@ -1,10 +1,10 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
+import { Op } from 'sequelize';
 import { RolesService } from 'src/roles/roles.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './users.model';
-import { Op } from 'sequelize';
 
 @Injectable()
 export class UsersService {
@@ -63,30 +63,22 @@ export class UsersService {
     id?: number;
     firstName?: string;
     lastName?: string;
-    firstNameChild?: string;
-    lastNameChild?: string;
-    class?: string;
   }): Promise<User[]> {
     const where: any = {};
 
-    if (filters.id) {
+    if (filters.id && !isNaN(filters.id)) {
       where.id = filters.id;
     }
+
     if (filters.firstName) {
-      where.firstName = { [Op.iLike]: `%${filters.firstName}%` }; // Case-insensitive search
+      where.firstName = { [Op.iLike]: `%${filters.firstName}%` };
     }
     if (filters.lastName) {
       where.lastName = { [Op.iLike]: `%${filters.lastName}%` };
     }
-    if (filters.firstNameChild) {
-      where.firstNameChild = { [Op.iLike]: `%${filters.firstNameChild}%` };
-    }
-    if (filters.lastNameChild) {
-      where.lastNameChild = { [Op.iLike]: `%${filters.lastNameChild}%` };
-    }
-    if (filters.class) {
-      where.class = { [Op.iLike]: `%${filters.class}%` };
-    }
+
+    console.log('Filters:', filters);
+    console.log('Filter conditions:', where);
 
     return this.userRepository.findAll({ where });
   }
