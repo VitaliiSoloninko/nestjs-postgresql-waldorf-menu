@@ -60,26 +60,28 @@ export class UsersService {
   }
 
   async filterUsers(filters: {
-    id?: number;
     firstName?: string;
     lastName?: string;
   }): Promise<User[]> {
     const where: any = {};
 
-    if (filters.id && !isNaN(filters.id)) {
-      where.id = filters.id;
+    // Add `firstName` to the query if provided
+    if (filters.firstName) {
+      where.firstName = { [Op.iLike]: `%${filters.firstName}%` }; // Case-insensitive search
     }
 
-    if (filters.firstName) {
-      where.firstName = { [Op.iLike]: `%${filters.firstName}%` };
-    }
+    // Add `lastName` to the query if provided
     if (filters.lastName) {
       where.lastName = { [Op.iLike]: `%${filters.lastName}%` };
     }
 
-    console.log('Filters:', filters);
-    console.log('Filter conditions:', where);
+    console.log('Generated WHERE conditions:', where); // Debugging log
 
     return this.userRepository.findAll({ where });
+  }
+
+  async checkEmailExists(email: string): Promise<boolean> {
+    const user = await this.userRepository.findOne({ where: { email } });
+    return !!user; // Return `true` if the user exists, otherwise `false`
   }
 }

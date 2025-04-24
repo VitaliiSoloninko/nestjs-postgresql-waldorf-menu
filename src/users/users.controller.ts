@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Body,
   Controller,
   Delete,
@@ -54,18 +55,29 @@ export class UsersController {
     return this.usersService.removeUser(+id);
   }
 
-  @ApiOperation({ summary: 'Filter users by fields' })
+  @ApiOperation({ summary: 'Filter users by firstName and lastName' })
   @ApiResponse({ status: 200, type: [User] })
   @Get('filter')
   filterUsers(
-    @Query('id') id?: string,
     @Query('firstName') firstName?: string,
     @Query('lastName') lastName?: string,
   ) {
-    return this.usersService.filterUsers({
-      id: id && !isNaN(Number(id)) ? Number(id) : undefined,
-      firstName,
-      lastName,
-    });
+    return this.usersService.filterUsers({ firstName, lastName });
+  }
+
+  @ApiOperation({ summary: 'Check if an email exists' })
+  @ApiResponse({
+    status: 200,
+    description: 'Returns true if the email exists, otherwise false',
+  })
+  @Get('check-email')
+  async checkEmailExists(
+    @Query('email') email: string,
+  ): Promise<{ exists: boolean }> {
+    if (!email) {
+      throw new BadRequestException('Email query parameter is required');
+    }
+    const exists = await this.usersService.checkEmailExists(email);
+    return { exists };
   }
 }
