@@ -29,7 +29,7 @@ export class UsersService {
   async findOneUser(id: number) {
     const user = await this.userRepository.findOne({ where: { id } });
     if (!user) {
-      throw new NotFoundException();
+      throw new NotFoundException(`User with id ${id} not found`);
     }
     return user;
   }
@@ -37,7 +37,7 @@ export class UsersService {
   async updateUser(id: number, updateUserDto: UpdateUserDto) {
     const user = await this.userRepository.findOne({ where: { id } });
     if (!user) {
-      throw new NotFoundException();
+      throw new NotFoundException(`User with id ${id} not found`);
     }
     Object.assign(user, updateUserDto);
     return await user.save();
@@ -46,9 +46,10 @@ export class UsersService {
   async removeUser(id: number) {
     const user = await this.userRepository.findByPk(id);
     if (!user) {
-      throw new NotFoundException();
+      throw new NotFoundException(`User with id ${id} not found`);
     }
-    return await user.destroy();
+    await user.destroy();
+    return { message: `User with id ${id} has been deleted` };
   }
 
   async getUserByEmail(email: string) {
@@ -56,32 +57,9 @@ export class UsersService {
       where: { email },
       include: { all: true },
     });
+    if (!user) {
+      throw new NotFoundException();
+    }
     return user;
-  }
-
-  async filterUsers(filters: {
-    firstName?: string;
-    lastName?: string;
-  }): Promise<User[]> {
-    const where: any = {};
-
-    // Add `firstName` to the query if provided
-    if (filters.firstName) {
-      where.firstName = { [Op.iLike]: `%${filters.firstName}%` }; // Case-insensitive search
-    }
-
-    // Add `lastName` to the query if provided
-    if (filters.lastName) {
-      where.lastName = { [Op.iLike]: `%${filters.lastName}%` };
-    }
-
-    console.log('Generated WHERE conditions:', where); // Debugging log
-
-    return this.userRepository.findAll({ where });
-  }
-
-  async checkEmailExists(email: string): Promise<boolean> {
-    const user = await this.userRepository.findOne({ where: { email } });
-    return !!user; // Return `true` if the user exists, otherwise `false`
   }
 }
