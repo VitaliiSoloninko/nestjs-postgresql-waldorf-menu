@@ -1,6 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
-import { Op } from 'sequelize';
 import { RolesService } from 'src/roles/roles.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -57,9 +56,6 @@ export class UsersService {
       where: { email },
       include: { all: true },
     });
-    if (!user) {
-      throw new NotFoundException();
-    }
     return user;
   }
 }
