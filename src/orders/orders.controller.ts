@@ -32,28 +32,7 @@ export class OrdersController {
     return this.orderService.findAll();
   }
 
-  @ApiOperation({ summary: 'Find all orders by user ID' })
-  @ApiResponse({ status: 200, type: [Order] })
-  @Get('user/:userId')
-  findOrdersByUserId(@Param('userId') userId: number): Promise<Order[]> {
-    return this.orderService.findOrdersByUserId(userId);
-  }
-
-  @ApiOperation({ summary: 'Find all orders by date' })
-  @ApiResponse({ status: 200, type: [Order] })
-  @Get('date/:date')
-  findOrdersByDate(@Param('date') date: string): Promise<Order[]> {
-    return this.orderService.findOrdersByDate(date);
-  }
-
-  @ApiOperation({ summary: 'Delete order' })
-  @ApiResponse({ status: 200 })
-  @Delete(':id')
-  removeOrder(@Param('id') id: number) {
-    return this.orderService.remove(id);
-  }
-
-  @ApiOperation({ summary: 'Filter orders by month' })
+  @ApiOperation({ summary: 'Get orders per month' })
   @ApiResponse({ status: 200, type: [Order] })
   @Get('filter-by-month')
   filterOrdersByMonth(
@@ -68,5 +47,26 @@ export class OrdersController {
     }
 
     return this.orderService.findOrdersByMonth(monthNumber, yearNumber);
+  }
+
+  @ApiOperation({ summary: 'Get orders by date' })
+  @ApiResponse({ status: 200, type: [Order] })
+  @Get('date/:date')
+  findOrdersByDate(@Param('date') date: string): Promise<Order[]> {
+    return this.orderService.findOrdersByDate(date);
+  }
+
+  @ApiOperation({ summary: 'Get user orders' })
+  @ApiResponse({ status: 200, type: [Order] })
+  @Get('user/:userId')
+  findOrdersByUserId(@Param('userId') userId: number): Promise<Order[]> {
+    return this.orderService.findOrdersByUserId(userId);
+  }
+
+  @ApiOperation({ summary: 'Delete order' })
+  @ApiResponse({ status: 200 })
+  @Delete(':id')
+  removeOrder(@Param('id') id: number) {
+    return this.orderService.remove(id);
   }
 }

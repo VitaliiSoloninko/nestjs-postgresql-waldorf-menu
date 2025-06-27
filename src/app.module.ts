@@ -11,6 +11,7 @@ import { Role } from './roles/roles.model';
 import { RolesModule } from './roles/roles.module';
 import { UserRoles } from './roles/user-roles.model';
 import { UserOrdersModule } from './user-orders/user-orders.module';
+import { UsersFilterModule } from './users-filter/users-filter.module';
 import { User } from './users/users.model';
 import { UsersModule } from './users/users.module';
 
@@ -33,6 +34,7 @@ import { UsersModule } from './users/users.module';
     }),
     FoodsModule,
     UsersModule,
+    UsersFilterModule,
     RolesModule,
     AuthModule,
     ProfileModule,

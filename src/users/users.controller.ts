@@ -6,17 +6,22 @@ import {
   Param,
   Patch,
   Post,
+  Query,
 } from '@nestjs/common';
+import { InjectModel } from '@nestjs/sequelize';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { User } from './users.model';
 import { UsersService } from './users.service';
 
 @ApiTags('Users')
 @Controller('api/users')
 export class UsersController {
-  userRepository: any;
-  constructor(private readonly usersService: UsersService) {}
+  constructor(
+    private readonly usersService: UsersService,
+    @InjectModel(User) private userRepository: typeof User,
+  ) {}
 
   @ApiOperation({ summary: 'Create user' })
   @ApiResponse({ status: 200, type: CreateUserDto })
