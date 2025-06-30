@@ -14,10 +14,11 @@ import { UserOrdersModule } from './user-orders/user-orders.module';
 import { UsersFilterModule } from './users-filter/users-filter.module';
 import { User } from './users/users.model';
 import { UsersModule } from './users/users.module';
+import { MailService } from './mail/mail/mail.service';
 
 @Module({
   controllers: [],
-  providers: [],
+  providers: [MailService],
   imports: [
     ConfigModule.forRoot({
       envFilePath: `.${process.env.NODE_ENV}.env`,
