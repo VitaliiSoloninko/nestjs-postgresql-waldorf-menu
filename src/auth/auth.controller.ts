@@ -1,7 +1,9 @@
 import { Body, Controller, Post } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
+import { MailService } from 'src/mail/mail/mail.service';
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
 import { UsersService } from 'src/users/users.service';
+import { v4 as uuidv4 } from 'uuid';
 import { AuthService } from './auth.service';
 
 @ApiTags('Authorization')
@@ -10,6 +12,7 @@ export class AuthController {
   constructor(
     private authService: AuthService,
     private userService: UsersService,
+    private mailService: MailService,
   ) {}
 
   @Post('/login')
@@ -28,6 +31,12 @@ export class AuthController {
     if (!user) {
       return { message: 'User not found' };
     }
-    return { message: 'User found', email };
+    const token = uuidv4();
+    await this.mailService.sendMail(
+      email,
+      'Password Reset',
+      `Your password reset token: ${token}`,
+    );
+    return { message: 'Password reset link sent to email' };
   }
 }
