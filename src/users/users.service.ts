@@ -1,10 +1,12 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { Op } from 'sequelize';
+import { PasswordReset } from 'src/auth/password-resets.model';
 import { RolesService } from 'src/roles/roles.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './users.model';
+import * as bcrypt from 'bcryptjs';
 
 @Injectable()
 export class UsersService {
@@ -58,5 +60,35 @@ export class UsersService {
       include: { all: true },
     });
     return user;
+  }
+
+  // ****** Password Reset Methods
+
+  async setResetToken(userId: number, token: string, expires: Date) {
+    await PasswordReset.destroy({ where: { userId } });
+    await PasswordReset.create({ userId, token, expires });
+  }
+
+  async getUserByResetToken(token: string) {
+    const record = await PasswordReset.findOne({
+      where: {
+        token,
+        expires: { [Op.gt]: new Date() },
+      },
+      include: [{ model: User }],
+    });
+    return record && record.user ? record.user : null;
+  }
+
+  async updatePassword(userId: number, newPassword: string) {
+    const hash = await bcrypt.hash(newPassword, 5);
+    await this.userRepository.update(
+      { password: hash },
+      { where: { id: userId } },
+    );
+  }
+
+  async clearResetToken(userId: number) {
+    await PasswordReset.destroy({ where: { userId } });
   }
 }

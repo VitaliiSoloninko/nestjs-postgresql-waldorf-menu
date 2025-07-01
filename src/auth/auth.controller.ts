@@ -32,11 +32,27 @@ export class AuthController {
       return { message: 'User not found' };
     }
     const token = uuidv4();
+    const expires = new Date(Date.now() + 60 * 60 * 1000);
+    await this.userService.setResetToken(user.id, token, expires);
     await this.mailService.sendMail(
       email,
       'Password Reset',
       `Your password reset token: ${token}`,
     );
     return { message: 'Password reset link sent to email' };
+  }
+
+  @Post('reset-password')
+  async resetPassword(
+    @Body('token') token: string,
+    @Body('newPassword') newPassword: string,
+  ) {
+    const user = await this.userService.getUserByResetToken(token);
+    if (!user) {
+      return { message: 'Invalid or expired token' };
+    }
+    await this.userService.updatePassword(user.id, newPassword);
+    await this.userService.clearResetToken(user.id);
+    return { message: 'Password updated successfully' };
   }
 }
