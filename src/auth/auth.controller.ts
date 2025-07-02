@@ -1,5 +1,5 @@
 import { Body, Controller, Post } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { MailService } from 'src/mail/mail/mail.service';
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
 import { UsersService } from 'src/users/users.service';
@@ -15,16 +15,22 @@ export class AuthController {
     private mailService: MailService,
   ) {}
 
+  @ApiOperation({ summary: 'Login user' })
+  @ApiResponse({ status: 200, description: 'User logged in successfully' })
   @Post('/login')
   login(@Body() userDto: CreateUserDto) {
     return this.authService.login(userDto);
   }
 
+  @ApiOperation({ summary: 'Register user' })
+  @ApiResponse({ status: 201, description: 'User registered successfully' })
   @Post('/registration')
   registration(@Body() userDto: CreateUserDto) {
     return this.authService.registration(userDto);
   }
 
+  @ApiOperation({ summary: 'Forgot password' })
+  @ApiResponse({ status: 201, description: 'User forgot password' })
   @Post('forgot-password')
   async forgotPassword(@Body('email') email: string) {
     const user = await this.userService.getUserByEmail(email);
@@ -42,6 +48,8 @@ export class AuthController {
     return { message: 'Password reset link sent to email' };
   }
 
+  @ApiOperation({ summary: 'Reset password' })
+  @ApiResponse({ status: 201, description: 'Password reset successfully' })
   @Post('reset-password')
   async resetPassword(
     @Body('token') token: string,
