@@ -36,12 +36,10 @@ export class MailService {
           Der Link ist 1 Stunde lang gültig.<br>
           ${resetUrl}
         </p>
-      </div>
-			
-			<div>
-					<h1>${subject}</h1>
-					<a href="${process.env.API_URL}/reset-password?token=${to}">Reset Password</a>
-			</div>`,
+        <p style="font-size:12px; color:#a0aec0;">
+          Ihr Passwort-Reset-Token: <b>${token}</b>
+        </p>
+      </div>`,
     });
   }
 }

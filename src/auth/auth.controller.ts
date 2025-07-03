@@ -40,11 +40,7 @@ export class AuthController {
     const token = uuidv4();
     const expires = new Date(Date.now() + 60 * 60 * 1000);
     await this.userService.setResetToken(user.id, token, expires);
-    await this.mailService.sendMail(
-      email,
-      'Password Reset',
-      `Your password reset token: ${token}`,
-    );
+    await this.mailService.sendMail(email, 'Password Reset', token);
     return { message: 'Password reset link sent to email' };
   }
 
