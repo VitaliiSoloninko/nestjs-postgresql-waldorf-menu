@@ -1,4 +1,4 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post, Query } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { MailService } from 'src/mail/mail/mail.service';
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
@@ -58,5 +58,13 @@ export class AuthController {
     await this.userService.updatePassword(user.id, newPassword);
     await this.userService.clearResetToken(user.id);
     return { message: 'Password updated successfully' };
+  }
+
+  @ApiOperation({ summary: 'Check if user with email exists' })
+  @ApiResponse({ status: 200, description: 'Check if user exists' })
+  @Get('exists')
+  async checkUserExists(@Query('email') email: string) {
+    const user = await this.userService.getUserByEmail(email);
+    return { exists: !!user };
   }
 }
