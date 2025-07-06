@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { IsOptional } from 'class-validator';
 
 export class CreateUserDto {
   @ApiProperty({ example: 'user@gmail.com', description: 'Email' })
@@ -14,10 +15,12 @@ export class CreateUserDto {
   readonly lastName: string;
 
   @ApiProperty({ example: 'John', description: 'First name of the child' })
-  readonly firstNameChild: string;
+  @IsOptional()
+  readonly firstNameChild?: string;
 
   @ApiProperty({ example: 'Doe', description: 'Last name of the child' })
-  readonly lastNameChild: string;
+  @IsOptional()
+  readonly lastNameChild?: string;
 
   @ApiProperty({ example: 'Street', description: 'Street' })
   readonly street: string;
@@ -35,8 +38,10 @@ export class CreateUserDto {
   readonly school: string;
 
   @ApiProperty({ example: '1', description: 'Class' })
-  readonly class: string;
+  @IsOptional()
+  readonly class?: string;
 
   @ApiProperty({ example: 'A', description: 'Letter' })
-  readonly letter: string;
+  @IsOptional()
+  readonly letter?: string;
 }

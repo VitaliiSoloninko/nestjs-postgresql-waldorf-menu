@@ -57,14 +57,14 @@ export class User extends Model<User, UserCreationAttrs> {
   @ApiProperty({ example: 'John', description: 'First name of the child' })
   @Column({
     type: DataType.STRING,
-    allowNull: false,
+    allowNull: true,
   })
   firstNameChild: string;
 
   @ApiProperty({ example: 'Doe', description: 'Last name of the child' })
   @Column({
     type: DataType.STRING,
-    allowNull: false,
+    allowNull: true,
   })
   lastNameChild: string;
 
@@ -106,7 +106,7 @@ export class User extends Model<User, UserCreationAttrs> {
   @ApiProperty({ example: '1', description: 'Class' })
   @Column({
     type: DataType.STRING,
-    allowNull: false,
+    allowNull: true,
   })
   class: string;
 

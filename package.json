@@ -28,6 +28,7 @@
     "@nestjs/sequelize": "^11.0.0",
     "@nestjs/swagger": "^11.0.3",
     "bcryptjs": "^2.4.3",
+    "class-validator": "^0.14.2",
     "cross-env": "^7.0.3",
     "nodemailer": "^7.0.4",
     "pg": "^8.13.1",
