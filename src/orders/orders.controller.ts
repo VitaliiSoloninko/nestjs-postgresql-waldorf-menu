@@ -7,8 +7,18 @@ import {
   Param,
   Post,
   Query,
+  UploadedFile,
+  UseInterceptors,
 } from '@nestjs/common';
-import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { FileInterceptor } from '@nestjs/platform-express';
+import {
+  ApiBody,
+  ApiConsumes,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
+import { MailService } from 'src/mail/mail/mail.service';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { Order } from './orders.model';
 import { OrdersService } from './orders.service';
@@ -16,7 +26,10 @@ import { OrdersService } from './orders.service';
 @ApiTags('Orders')
 @Controller('api/orders')
 export class OrdersController {
-  constructor(private orderService: OrdersService) {}
+  constructor(
+    private orderService: OrdersService,
+    private mailService: MailService,
+  ) {}
 
   @ApiOperation({ summary: 'Create or update orders' })
   @ApiResponse({ status: 200, type: [Order] })
@@ -68,5 +81,35 @@ export class OrdersController {
   @Delete(':id')
   removeOrder(@Param('id') id: number) {
     return this.orderService.remove(id);
+  }
+
+  @Post('send-invoice')
+  @UseInterceptors(FileInterceptor('file'))
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: {
+        file: { type: 'string', format: 'binary' },
+        userId: { type: 'string' },
+        email: { type: 'string' },
+        month: { type: 'string' },
+        year: { type: 'string' },
+      },
+    },
+  })
+  async sendInvoice(
+    @UploadedFile() file: Express.Multer.File,
+    @Body('userId') userId: string,
+    @Body('email') email: string,
+    @Body('month') month: string,
+    @Body('year') year: string,
+  ) {
+    try {
+      await this.mailService.sendInvoiceInPDF(email, file, month, year);
+      return { message: 'Invoice sent successfully' };
+    } catch (e) {
+      return { message: 'Error sending invoice', error: e.message };
+    }
   }
 }

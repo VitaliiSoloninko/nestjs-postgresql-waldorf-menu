@@ -42,4 +42,25 @@ export class MailService {
       </div>`,
     });
   }
+
+  async sendInvoiceInPDF(
+    to: string,
+    file: Express.Multer.File,
+    month: string,
+    year: string,
+  ) {
+    await this.transporter.sendMail({
+      from: process.env.SMTP_USER,
+      to,
+      subject: `Ihr Monatsbeleg für ${month}/${year}`,
+      text: `Im Anhang finden Sie Ihren Monatsbeleg für ${month}/${year}.`,
+      attachments: [
+        {
+          filename: file.originalname || `Rechnung_${month}_${year}.pdf`,
+          content: file.buffer,
+          contentType: 'application/pdf',
+        },
+      ],
+    });
+  }
 }
